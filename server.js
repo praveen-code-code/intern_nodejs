@@ -40,5 +40,14 @@ app.put('/update/:id' , async (req,res)=>{
     }
 })
 
+ app.get('/get_all_data', async (req,res)=>{
+    try{
+        const allData = await UserData.find();
+        return res.json(allData)
+    }
+    catch (err){
+        console.log(err.message)
+    }
+ })
 
 app.listen(3000, ()=>console.log("server is running....."))
