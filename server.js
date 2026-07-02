@@ -60,6 +60,24 @@ app.put('/update/:id' , async (req,res)=>{
         console.log(err.message)
     }
  } )
-
+app.delete('/delete/:id', async (req,res)=>{
+    try{
+        await UserData.findByIdAndDelete(req.params.id);
+        return res.json("user data deleted..")
+    }
+    catch(err){
+        console.log(err.message)
+    }
+} )
+app.delete('/delete/:id1/:id2', async (req,res)=>{
+    try{
+        await UserData.findByIdAndDelete(req.params.id1);
+        await UserData.findByIdAndDelete(req.params.id2);
+        return res.json("user data deleted..")
+    }
+    catch(err){
+        console.log(err.message)
+    }
+} )
 
 app.listen(3000, ()=>console.log("server is running....."))
