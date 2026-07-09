@@ -36,7 +36,30 @@ app.post("/signup", async (req,res)=>{
 
 })
 
-
+app.post("/login", async(req,res)=>{
+  try{
+    const{email,password} = req.body;
+    const foundUser = await UserData.findOne({email});
+    if(!foundUser){
+      return res.json({message:"invaild credentials"})
+    }
+    const salt = await bcrypt.genSalt(10);
+    const ismatch = await bcrypt.compare(password,foundUser.password);
+    if(!ismatch){
+      return res.json({message:"invalid password"})
+    }
+    return res.json({
+      message:"user login successful",
+      user:{
+        id:foundUser._id,
+        username:foundUser.username
+      }
+    })
+  }
+  catch(err){
+    console.log(err.message)
+  }
+})
 
 
 
