@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const UserData = require('./model');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 const app = express();
 
@@ -23,8 +24,10 @@ app.post("/signup", async (req,res)=>{
 
         const newUser = new UserData({username,email,password:hashed_password});
         await  newUser.save();
+        const token =jwt.sign({id:newUser._id}, "this is my secret key", {expiresIn:"1h"})
         return res.json({
             message :" user signup successful",
+            token: token,
             user:{
                 username:newUser.username
             }
@@ -48,8 +51,10 @@ app.post("/login", async(req,res)=>{
     if(!ismatch){
       return res.json({message:"invalid password"})
     }
+    const token =jwt.sign({id:foundUser._id}, "this is my secret key", {expiresIn:"1h"})
     return res.json({
       message:"user login successful",
+       token: token,
       user:{
         id:foundUser._id,
         username:foundUser.username
